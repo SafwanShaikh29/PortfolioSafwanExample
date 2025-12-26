@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Safwan Feroz Shaikh | Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== Variables & Reset ===== */
+:root {
+  --bg-dark: #0f172a;
+  --bg-gradient: radial-gradient(circle at top right, #1e293b, #0f172a);
+  --primary: #3b82f6; /* Bright Blue */
+  --accent: #8b5cf6;  /* Violet */
+  --glass: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --card-hover: rgba(59, 130, 246, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  cursor: none; /* Hide default cursor for custom one */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-dark);
+  background-image: var(--bg-gradient);
+  color: var(--text-main);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, strong {
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ===== Custom Cursor ===== */
+.cursor-dot,
+.cursor-outline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+}
+
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--primary);
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+/* Cursor Hover State */
+body.hovering .cursor-outline {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: transparent;
+}
+
+/* ===== Header & Nav ===== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 100;
+  transition: padding 0.3s;
+}
+
+nav {
+  max-width: 1100px;
+  margin: auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.brand-text h4 { margin: 0; line-height: 1.2; font-size: 16px; }
+.brand-text small { color: var(--text-muted); font-size: 12px; }
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav-links a {
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a:hover {
+  color: var(--primary);
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--primary);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.contact-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff !important;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  transition: transform 0.2s;
+}
+
+.contact-btn:hover {
+  transform: scale(1.05);
+  color: #fff !important;
+}
+
+.contact-btn::after { display: none; }
+
+/* ===== Layout ===== */
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 100px 20px 80px; /* Top padding accounts for fixed header */
+}
+
+.section {
+  margin-bottom: 80px;
+  opacity: 0; /* For scroll animation */
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Hero / About ===== */
+.panel {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative glow behind panel */
+.panel::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.about h1 {
+  font-size: 42px;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 16px;
+}
+
+.about p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 16px;
+  max-width: 800px;
+}
+
+.skills {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.skill {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  font-size: 13px;
+  border-radius: 50px;
+  transition: all 0.3s;
+}
+
+.skill:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.links {
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+}
+
+.link-btn {
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.link-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+/* ===== Download Resume Button ===== */
+.center {
+  margin-top: 40px;
+  text-align: left; /* Aligned left for better flow */
+}
+
+.resume-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: white;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.5);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px -10px rgba(139, 92, 246, 0.6);
+}
+
+.resume-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* ===== Grids & Cards ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  background: var(--card-hover);
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px -20px rgba(59, 130, 246, 0.4);
+}
+
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: var(--primary);
+}
+
+.card p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Section Headers */
+h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 4px;
+  background: var(--accent);
+  bottom: -8px;
+  left: 0;
+  border-radius: 2px;
+}
+
+/* ===== Contact Form ===== */
+.contact-form {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid var(--glass-border);
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  transition: 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.form-group button {
+  padding: 14px 28px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  width: 100%;
+  transition: 0.3s;
+}
+
+.form-group button:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* ===== Footer ===== */
+footer {
+  border-top: 1px solid var(--glass-border);
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  background: #0b1120;
+}
+
+.footer-content {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links { display: none; } /* Simplified for mobile */
+  .about h1 { font-size: 32px; }
+  .footer-content { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cursor-dot" data-cursor-dot></div>
+<div class="cursor-outline" data-cursor-outline></div>
+
+<header>
+<nav>
+  <div class="brand">
+    <div class="brand-badge">SF</div>
+    <div class="brand-text">
+      <h4>Safwan Shaikh</h4>
+      <small>AI & Data Science</small>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="#about" class="hover-trigger">About</a>
+    <a href="#projects" class="hover-trigger">Projects</a>
+    <a href="#experience" class="hover-trigger">Experience</a>
+    <a href="#certifications" class="hover-trigger">Certifications</a>
+    <a href="#contact" class="contact-btn hover-trigger">Contact</a>
+  </div>
+</nav>
+</header>
+
+<main>
+
+<section id="about" class="section panel about">
+  <h1>Hi — I’m Safwan.</h1>
+  <p>
+    An AI & Data Science enthusiast dedicated to building intelligent ML solutions, real-time web applications, and scalable data tools.
+    I transform complex data into actionable insights and robust software.
+  </p>
+
+  <div class="skills">
+    <div class="skill hover-trigger">Python</div>
+    <div class="skill hover-trigger">Java</div>
+    <div class="skill hover-trigger">TensorFlow</div>
+    <div class="skill hover-trigger">MySQL</div>
+    <div class="skill hover-trigger">HTML/CSS</div>
+    <div class="skill hover-trigger">JavaScript</div>
+    <div class="skill hover-trigger">Power BI</div>
+    <div class="skill hover-trigger">Tableau</div>
+  </div>
+
+  <div class="links">
+    <a href="https://github.com" target="_blank" class="link-btn hover-trigger">GitHub</a>
+    <a href="https://linkedin.com" target="_blank" class="link-btn hover-trigger">LinkedIn</a>
+  </div>
+
+  <div class="center">
+    <a href="your-resume.pdf" download="Safwan_Shaikh_Resume.pdf" class="resume-btn hover-trigger">
+      <svg viewBox="0 0 24 24"><path d="M12 16L7 11H10V4H14V11H17L12 16ZM20 18V20H4V18H20Z"></path></svg>
+      Download Resume
+    </a>
+  </div>
+</section>
+
+<section id="projects" class="section">
+  <h2>Featured Projects</h2>
+  <div class="grid">
+    <div class="card hover-trigger">
+      <h3>Real-Time Public Transport</h3>
+      <p>A live tracking system using Flask + SSE backend. integrated with Leaflet.js & OpenStreetMap for real-time GPS visualization.</p>
+    </div>
+    <div class="card hover-trigger">
+      <h3>Face Mask Detection</h3>
+      <p>Computer vision model using OpenCV + CNN architectures. Achieved 95%+ accuracy in varying lighting conditions.</p>
+    </div>
+    <div class="card hover-trigger">
+      <h3>Movie Recommendation AI</h3>
+      <p>Hybrid recommendation engine utilizing Collaborative Filtering and Content-Based filtering techniques.</p>
+    </div>
+    <div class="card hover-trigger">
+      <h3>Art Gallery DB System</h3>
+      <p>Full-stack management system with a Normalized MySQL schema and complex Stored Procedures.</p>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="section">
+  <h2>Experience & Training</h2>
+  <div class="grid">
+    <div class="card hover-trigger">
+      <h3>YBI Foundation — ML Intern</h3>
+      <p style="color:var(--accent); font-weight:600; margin-bottom:5px">Dec 2025 – Mar 2026</p>
+      <p>Developing predictive models and analyzing large datasets.</p>
+    </div>
+    <div class="card hover-trigger">
+      <h3>NVIDIA Skill Program</h3>
+      <p style="color:var(--accent); font-weight:600; margin-bottom:5px">Jun 2025</p>
+      <p>Intensive training on Deep Learning and CUDA computing.</p>
+    </div>
+    <div class="card hover-trigger">
+      <h3>Zensar Employability</h3>
+      <p style="color:var(--accent); font-weight:600; margin-bottom:5px">Mar – Apr 2025</p>
+      <p>Soft skills and full-stack development foundations.</p>
+    </div>
+  </div>
+</section>
+
+<section id="certifications" class="section">
+  <h2>Certifications</h2>
+  <div class="grid">
+    <div class="card hover-trigger"><h3>Power BI – Infosys</h3></div>
+    <div class="card hover-trigger"><h3>DBMS – NPTEL</h3></div>
+    <div class="card hover-trigger"><h3>NVIDIA AI Program</h3></div>
+    <div class="card hover-trigger"><h3>IBM Data Analytics</h3></div>
+  </div>
+</section>
+
+<section id="contact" class="section">
+  <div class="grid" style="grid-template-columns: 1fr 1.5fr; gap:40px;">
+    
+    <div class="panel hover-trigger">
+      <div class="brand-badge" style="width:60px; height:60px; font-size:24px; margin-bottom:20px;">SF</div>
+      <h3 style="margin-top:0">Contact Details</h3>
+      <p><strong>Phone:</strong> +91 8767299267</p>
+      <p><strong>Email:</strong> safwanshaikh489@gmail.com</p>
+      <p><strong>Loc:</strong> India</p>
+    </div>
+
+    <form class="contact-form form-group">
+      <h2>Send a Message</h2>
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea rows="4" placeholder="How can I help you?" required></textarea>
+      <button type="button" class="hover-trigger">Send Message</button>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-content">
+    <span>© 2025 Safwan Shaikh — Data Science & AI</span>
+    <span>Built with HTML, CSS & JS</span>
+  </div>
+</footer>
+
+<script>
+  /** * 1. Custom Cursor Logic
+   */
+  const cursorDot = document.querySelector('[data-cursor-dot]');
+  const cursorOutline = document.querySelector('[data-cursor-outline]');
+  
+  window.addEventListener("mousemove", function(e) {
+    const posX = e.clientX;
+    const posY = e.clientY;
+
+    // Dot follows instantly
+    cursorDot.style.left = `${posX}px`;
+    cursorDot.style.top = `${posY}px`;
+
+    // Outline follows with slight delay (animation in CSS)
+    cursorOutline.animate({
+      left: `${posX}px`,
+      top: `${posY}px`
+    }, { duration: 500, fill: "forwards" });
+  });
+
+  // Grow cursor on interactive elements
+  const hoverTriggers = document.querySelectorAll('.hover-trigger, a, button, input, textarea');
+  
+  hoverTriggers.forEach(trigger => {
+    trigger.addEventListener('mouseenter', () => {
+      document.body.classList.add('hovering');
+    });
+    trigger.addEventListener('mouseleave', () => {
+      document.body.classList.remove('hovering');
+    });
+  });
+
+  /**
+   * 2. Scroll Reveal Animation
+   * Uses Intersection Observer to fade elements in when they scroll into view
+   */
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Optional: stop observing once visible
+        // observer.unobserve(entry.target); 
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.section').forEach(section => {
+    observer.observe(section);
+  });
+
+  /**
+   * 3. Download Button Logic
+   * In a real environment, the 'href' and 'download' attributes in HTML handle this.
+   * This script adds a visual feedback alert if no file is linked.
+   */
+  const resumeBtn = document.querySelector('.resume-btn');
+  resumeBtn.addEventListener('click', (e) => {
+    const link = resumeBtn.getAttribute('href');
+    if(link === 'your-resume.pdf') {
+      e.preventDefault();
+      alert("Demo Mode: Please replace 'your-resume.pdf' in the HTML code with your actual file path.");
+    }
+  });
+
+</script>
+
+</body>
+</html>
